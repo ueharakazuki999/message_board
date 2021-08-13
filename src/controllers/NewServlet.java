@@ -29,7 +29,10 @@ public class NewServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // CSRF対策
+            // CSRF対策
+        request.setAttribute("_token", request.getSession().getId());
+
+
         request.setAttribute("message", new Message());
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/messages/new.jsp");

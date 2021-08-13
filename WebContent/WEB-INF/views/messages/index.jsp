@@ -12,7 +12,7 @@
             </a>
             :<c:out value="${message.title}"></c:out> &gt; <c:out value="${message.content}" />
            </li>
-          </c:forEach>
+         </c:forEach>
     </ul>
 
     <p><a href="${pageContext.request.contextPath}/new">新規メッセージの投稿</a></p>
