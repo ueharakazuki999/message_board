@@ -34,11 +34,33 @@ public class IndexServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EntityManager em = DBUtil.createEntityManager();
 
-        List<Message> messages = em.createNamedQuery("getAllMessages",Message.class).getResultList();
+        //開くページ数を取得
+        int page = 1;
+        try {
+            page= Integer.parseInt(request.getParameter("page"));
+
+        } catch(NumberFormatException e) {}
+        List<Message> messages = em.createNamedQuery("getAllMessages",Message.class)
+                .setFirstResult(10 * (page - 1))
+                .setMaxResults(10)
+                .getResultList();
+
+        //全件数を取得
+        long messages_count = (long)em.createNamedQuery("getMessagesCount",Long.class)
+                                    .getSingleResult();
 
         em.close();
 
         request.setAttribute("messages", messages);
+        request.setAttribute("messages_count", messages_count);
+        request.setAttribute("page", page);
+
+        //フラッシュメッセージがセッションスコープにセットされていたら
+        //リクエストスコープに保存する(セッションスコープからは削除)
+        if(request.getSession().getAttribute("flush") != null) {
+            request.setAttribute("flush", request.getSession().getAttribute("flush"));
+            request.getSession().removeAttribute("flush");
+        }
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/messages/index.jsp");
         rd.forward(request,response);

@@ -10,7 +10,7 @@
 </head>
 <body>
 <div id="wrapper">
-    <div id="header">
+    <div id="header" class="hdr">
     <h1>メッセージボード アプリケーション</h1>
 
     </div>
